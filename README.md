@@ -1,1 +1,1 @@
-# vtm5e-roller-discord
+# Vampire: The Masquerade 5e Discord Dice Roller
