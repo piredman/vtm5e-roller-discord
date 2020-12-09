@@ -28,6 +28,12 @@ async def roll(ctx: Context, number_of_dice: int, number_of_hunger: int):
     await send_message(ctx, message)
 
 
+@bot.event
+async def on_command_error(ctx, error):
+    await ctx.send('What was that? If you don\'t start making sense you just might become lunch.')
+    raise error
+
+
 def getEmoji(emoji_name: str):
     return discord.utils.get(bot.emojis, name=emoji_name)
 

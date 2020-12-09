@@ -1,7 +1,9 @@
 import pytest
+
 from dice_pool_message import DicePoolMessage
 from dice_pool import DicePool, DicePoolState
 from die import Die, DieType
+
 import colours as Colours
 import emojis as Emojis
 

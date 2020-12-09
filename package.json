@@ -1,0 +1,14 @@
+{
+  "name": "vtm-roller",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "python bot/bot.py",
+    "start:watch": "nodemon bot/bot.py",
+    "test": "pytest",
+    "test:watch": "ptw --clear --poll",
+    "test:coverage": "pytest --cov=bot bot/"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
