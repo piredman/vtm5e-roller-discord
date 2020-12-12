@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 
 from dice_pool import DicePool
 from dice_pool_message import DicePoolMessage
+import colours as Colours
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -30,7 +31,14 @@ async def roll(ctx: Context, number_of_dice: int, number_of_hunger: int):
 
 @bot.event
 async def on_command_error(ctx, error):
-    await ctx.send('What was that? If you don\'t start making sense you just might become lunch.')
+    embedVar = discord.Embed(
+        title=f'Oh no, is that the sunrise peaking over the horizon?',
+        color=Colours.RED)
+    embedVar.add_field(
+        name='Usage', value='/pool [pool dice] [hunger dice]', inline=False)
+    embedVar.add_field(name='Example', value='/pool 10 3', inline=False)
+
+    await ctx.send(embed=embedVar)
     raise error
 
 
