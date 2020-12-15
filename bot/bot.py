@@ -30,7 +30,7 @@ async def roll(ctx: Context, pool_dice: int, hunger_dice: int):
 
 @bot.event
 async def on_command_error(ctx, error):
-    await send_error(ctx, f'{error}')
+    await send_error(ctx, 'Sorry, please try again')
     raise error
 
 
@@ -48,7 +48,7 @@ async def send_message(ctx, message):
 
 async def send_error(ctx, message):
     embedVar = discord.Embed(
-        title=f'Sorry, please try again', color=Colours.RED)
+        title=f'{message}', color=Colours.RED)
     embedVar.add_field(
         name='Usage', value='/pool [pool dice] [hunger dice]', inline=False)
     embedVar.add_field(name='Example', value='/pool 10 3', inline=False)
