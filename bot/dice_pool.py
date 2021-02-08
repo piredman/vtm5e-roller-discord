@@ -19,6 +19,9 @@ class DicePool(object):
         self.results = []
 
     def roll(self, pool_size: int, hunger_size: int):
+        if (hunger_size == None):
+            hunger_size = 0
+
         pool_results = []
         for index in range(pool_size):
             dieType = DieType.HUNGER if index + 1 <= hunger_size else DieType.REGULAR

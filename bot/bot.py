@@ -1,6 +1,7 @@
 # bot.py
 import os
 import discord
+import typing
 
 from discord.utils import get
 from discord.ext import commands
@@ -19,7 +20,7 @@ bot = commands.Bot(command_prefix='/')
 
 
 @bot.command(name='pool', help='Simulates rolling vtm dice pool')
-async def roll(ctx: Context, pool_dice: int, hunger_dice: int):
+async def roll(ctx: Context, pool_dice: int, hunger_dice: typing.Optional[int]):
     command = RollCommand(getEmoji)
     result = command.roll(pool_dice, hunger_dice)
     if (result.state == CommandResultState.SUCCESS):
@@ -30,7 +31,6 @@ async def roll(ctx: Context, pool_dice: int, hunger_dice: int):
 
 @bot.event
 async def on_command_error(ctx, error):
-    await send_error(ctx, 'Sorry, please try again')
     raise error
 
 

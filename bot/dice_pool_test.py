@@ -42,6 +42,14 @@ def test_pool_dice_between_one_and_ten(pool_size, hunger_size):
         assert die.die_value >= 1 and die.die_value <= 10
 
 
+def test_empty_hunger_defaults_to_zero():
+    pool_size = 5
+    dicePool = DicePool()
+    dicePool.roll(pool_size, None)
+    assert len(dicePool.results) == pool_size
+    assert len(dicePool.getHungerDice()) == 0
+
+
 def test_get_failure_dice():
     dicePool = DicePool()
     for value in range(1, 10+1):

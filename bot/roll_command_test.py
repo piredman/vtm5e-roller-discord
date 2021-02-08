@@ -49,3 +49,16 @@ def test_invalid_roll(dice, hunger):
 
     message = result.payload
     assert type(message) is str
+
+
+def test_optional_hunger_roll():
+    command = RollCommand(getEmojiMock)
+    result = command.roll(5, None)
+    assert result.state == CommandResultState.SUCCESS
+
+    message = result.payload
+    assert message['title'] is not None
+    assert message['dice_text'] is not None
+    assert message['dice_emojis'] is not None
+    assert message['state'] is not None
+    assert message['colour'] is not None
