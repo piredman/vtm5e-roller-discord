@@ -23,18 +23,45 @@ You are free to use the custom emjoi images I've created in this project
 
 <img src="./images/discord-settings-emoji.png?raw=true" width="800">
 
-## Usage
+---
+
+## Commands
+
+### Pool Command
+
+Syntax:
 
 ```
-/pool 10 3
+/pool <number of dice in pool> <number of hunger dice>
 ```
 
-Roll a dice pool with a total of 10 dice, 3 of which are hunger dice
+Roll a dice pool, suppling the total number of dice in the pool and how many of those dice are hunger dice.
 
-<img src="./images/example-pool-command.png?raw=true" width="500" />
+Example:
+
+```
+# Roll a dice pool of 7 dice, 3 of which are hunger dice
+/pool 7 3
+```
+
+### Rouse Command
+
+Syntax:
+
+```
+/rouse
+```
+
+Roll a rouse check. This a convience command that always creates a dice pool of 1 regular die and no hunger die.
+
+Example:
+
+```
+/rouse
+```
 
 ---
 
-### Examples
+### Visual Examples
 
 <img src="./images/vampire-dice.png?raw=true" width="500" />
