@@ -28,8 +28,9 @@ def test_valid_roll(dice, hunger):
 
     message = result.payload
     assert message['title'] is not None
-    assert message['dice_text'] is not None
     assert message['dice_emojis'] is not None
+    assert message['regular_dice_text'] is not None
+    assert message['hunger_dice_text'] is not None
     assert message['state'] is not None
     assert message['colour'] is not None
 
@@ -58,7 +59,8 @@ def test_optional_hunger_roll():
 
     message = result.payload
     assert message['title'] is not None
-    assert message['dice_text'] is not None
     assert message['dice_emojis'] is not None
+    assert message['regular_dice_text'] is not None
+    assert message['hunger_dice_text'] is not None
     assert message['state'] is not None
     assert message['colour'] is not None

@@ -19,8 +19,8 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='/')
 
 
-@bot.command(name='pool', help='Simulates rolling vtm dice pool')
-async def roll(ctx: Context, pool_dice: int, hunger_dice: typing.Optional[int]):
+@bot.command(name='pool', help='Roll a dice pool of regular & hunger dice')
+async def pool(ctx: Context, pool_dice: int, hunger_dice: typing.Optional[int]):
     command = RollCommand(getEmoji)
     result = command.roll(pool_dice, hunger_dice)
     if (result.state == CommandResultState.SUCCESS):
@@ -40,9 +40,17 @@ def getEmoji(emoji_name: str):
 
 async def send_message(ctx, message):
     embedVar = discord.Embed(
-        title=f'{message["state"]}, {message["title"]}', description=message["dice_text"], color=message["colour"])
+        title=f'{message["state"]}, {message["title"]}', color=message["colour"])
 
-    await ctx.send(message["dice_emojis"])
+    embedVar.add_field(name="regular", value=f'{message["regular_dice_text"]}')
+    if message["hunger_dice_text"]:
+        embedVar.add_field(
+            name="hunger", value=f'{message["hunger_dice_text"]}')
+
+    emojis = message["dice_emojis"]
+    if (emojis is not None):
+        await ctx.send(message["dice_emojis"])
+
     await ctx.send(embed=embedVar)
 
 

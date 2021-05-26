@@ -38,20 +38,40 @@ def test_get_message_colour(state: DicePoolState, colour):
 @pytest.mark.parametrize(
     "results,expected",
     [
-        pytest.param([Die(die_value=10)], '10'),
-        pytest.param([Die(die_value=10),
-                      Die(die_value=3)], '10,~~3~~'),
-        pytest.param([Die(die_value=10),
-                      Die(die_value=1),
-                      Die(die_value=3)], '10,~~1~~,~~3~~'),
+        pytest.param([Die(die_type=DieType.REGULAR, die_value=10)], '10'),
+        pytest.param([Die(die_type=DieType.REGULAR, die_value=10),
+                      Die(die_type=DieType.HUNGER, die_value=3)], '10'),
+        pytest.param([Die(die_type=DieType.REGULAR, die_value=10),
+                      Die(die_type=DieType.REGULAR, die_value=1),
+                      Die(die_type=DieType.HUNGER, die_value=3)], '10,~~1~~'),
     ]
 )
-def test_get_dice_as_text(results, expected):
+def test_get_regular_dice_as_text(results, expected):
     dice_pool = DicePool()
     dice_pool.results = results
 
     message = DicePoolMessage(dice_pool)
-    result = message.getDiceAsText()
+    result = message.getRegularDiceAsText()
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "results,expected",
+    [
+        pytest.param([Die(die_type=DieType.HUNGER, die_value=10)], '10'),
+        pytest.param([Die(die_type=DieType.REGULAR, die_value=10),
+                      Die(die_type=DieType.HUNGER, die_value=3)], '~~3~~'),
+        pytest.param([Die(die_type=DieType.HUNGER, die_value=10),
+                      Die(die_type=DieType.REGULAR, die_value=1),
+                      Die(die_type=DieType.HUNGER, die_value=3)], '10,~~3~~'),
+    ]
+)
+def test_get_hunger_dice_as_text(results, expected):
+    dice_pool = DicePool()
+    dice_pool.results = results
+
+    message = DicePoolMessage(dice_pool)
+    result = message.getHungerDiceAsText()
     assert result == expected
 
 
@@ -83,7 +103,7 @@ def test_get_dice_as_text(results, expected):
             Die(die_value=1, die_type=DieType.HUNGER),
             Die(die_value=6, die_type=DieType.REGULAR),
             Die(die_value=10, die_type=DieType.REGULAR)],
-            f'{Emojis.HUNGER_BEASTIAL}{Emojis.REGULAR_SUCCESS}{Emojis.REGULAR_CRITICAL}')
+            f'{Emojis.REGULAR_SUCCESS}{Emojis.REGULAR_CRITICAL}{Emojis.HUNGER_BEASTIAL}')
     ]
 )
 def test_get_dice_as_emotes(results, expected):
@@ -108,8 +128,9 @@ def getEmojiMock(emote_name: str):
             Die(die_value=10, die_type=DieType.REGULAR)],
             {
                 'title': f'2 successes',
-                'dice_text': f'~~1~~,6,10',
-                'dice_emojis': f'{Emojis.HUNGER_BEASTIAL}{Emojis.REGULAR_SUCCESS}{Emojis.REGULAR_CRITICAL}',
+                'dice_emojis': f'{Emojis.REGULAR_SUCCESS}{Emojis.REGULAR_CRITICAL}{Emojis.HUNGER_BEASTIAL}',
+                'regular_dice_text': f'6,10',
+                'hunger_dice_text': f'~~1~~',
                 'state': DicePoolState.SUCCESS.name,
                 'colour': Colours.GREEN
         })
