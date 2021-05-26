@@ -29,6 +29,16 @@ async def pool(ctx: Context, pool_dice: int, hunger_dice: typing.Optional[int]):
         await send_error(ctx, result.payload)
 
 
+@bot.command(name='rouse', help='Roll a rouse check, dice pool of 1 regular dice')
+async def rouse(ctx: Context):
+    command = RollCommand(getEmoji)
+    result = command.roll(number_of_dice=1, number_of_hunger=0)
+    if (result.state == CommandResultState.SUCCESS):
+        await send_message(ctx, result.payload)
+    else:
+        await send_error(ctx, result.payload)
+
+
 @bot.event
 async def on_command_error(ctx, error):
     raise error
