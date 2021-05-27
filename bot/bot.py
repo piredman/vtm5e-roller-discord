@@ -2,8 +2,11 @@
 import os
 import discord
 import typing
+import logging
 
 from discord.utils import get
+from discord.message import Message
+
 from discord.ext import commands
 from discord.ext.commands import Context, Bot
 
@@ -15,6 +18,8 @@ import colours as Colours
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+logging.basicConfig(level=logging.ERROR)
+logging.info(discord.version_info)
 
 bot = commands.Bot(command_prefix='/')
 
@@ -39,6 +44,49 @@ async def rouse(ctx: Context):
         await send_error(ctx, result.payload)
 
 
+@bot.command(name='will', help='Use willpower to reroll up to 3 failed regular dice')
+async def will(ctx: Context):
+    botId = ctx.bot.user.id
+    authorId = ctx.author.id
+
+    message_command = None
+    message_result = None
+    messages = await ctx.channel.history().flatten()
+    for message in messages:
+        if message.author.id != botId or len(message.embeds) <= 0 or message.reference is None:
+            continue
+
+        message_ref = await ctx.fetch_message(message.reference.message_id)
+        if (
+            message_ref is None or
+            not message_ref.content.startswith('/pool') or
+            message_ref.author.id != authorId
+        ):
+            continue
+
+        message_command = message_ref
+        message_result = message
+        break
+
+    if not message_command or not message_result:
+        return
+
+    embed = discord.Embed(title='Previous Roll')
+    embed.add_field(
+        name='content', value=f'{message_result.content}', inline=False)
+    if message_result.embeds and len(message_result.embeds) > 0:
+        message_embed = message_result.embeds[0]
+        embed.add_field(
+            name='title', value=f'{message_embed.title}', inline=False)
+        for field in message_embed.fields:
+            embed.add_field(name=f'{field.name}', value=f'{field.value}')
+
+    await ctx.send(
+        content=f'{message_command.author.name} makes a willpower roll',
+        embed=embed,
+        reference=ctx.message)
+
+
 @bot.event
 async def on_command_error(ctx, error):
     raise error
@@ -49,19 +97,23 @@ def getEmoji(emoji_name: str):
 
 
 async def send_message(ctx, message):
+    content = ''
+    if message["dice_emojis"]:
+        content = message["dice_emojis"]
+
     embedVar = discord.Embed(
         title=f'{message["state"]}, {message["title"]}', color=message["colour"])
-
-    embedVar.add_field(name="regular", value=f'{message["regular_dice_text"]}')
+    if message["regular_dice_text"]:
+        embedVar.add_field(
+            name="regular", value=f'{message["regular_dice_text"]}')
     if message["hunger_dice_text"]:
         embedVar.add_field(
             name="hunger", value=f'{message["hunger_dice_text"]}')
 
-    emojis = message["dice_emojis"]
-    if (emojis is not None):
-        await ctx.send(message["dice_emojis"])
-
-    await ctx.send(embed=embedVar)
+    if content:
+        await ctx.send(content=content, embed=embedVar, reference=ctx.message)
+    else:
+        await ctx.send(embed=embedVar, reference=ctx.message)
 
 
 async def send_error(ctx, message):
