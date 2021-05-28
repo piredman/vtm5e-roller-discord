@@ -1,6 +1,6 @@
 import pytest
 
-from roll_command import RollCommand
+from pool_command import PoolCommand
 from command_result import CommandResultState
 
 
@@ -9,7 +9,7 @@ def getEmojiMock(emote_name: str):
 
 
 def test_init_dice_pool_message():
-    command = RollCommand(getEmojiMock)
+    command = PoolCommand(getEmojiMock)
     assert command is not None
 
 
@@ -22,7 +22,7 @@ def test_init_dice_pool_message():
     ]
 )
 def test_valid_roll(dice, hunger):
-    command = RollCommand(getEmojiMock)
+    command = PoolCommand(getEmojiMock)
     result = command.roll(dice, hunger)
     assert result.state == CommandResultState.SUCCESS
 
@@ -44,7 +44,7 @@ def test_valid_roll(dice, hunger):
     ]
 )
 def test_invalid_roll(dice, hunger):
-    command = RollCommand(getEmojiMock)
+    command = PoolCommand(getEmojiMock)
     result = command.roll(dice, hunger)
     assert result.state == CommandResultState.ERROR
 
@@ -53,7 +53,7 @@ def test_invalid_roll(dice, hunger):
 
 
 def test_optional_hunger_roll():
-    command = RollCommand(getEmojiMock)
+    command = PoolCommand(getEmojiMock)
     result = command.roll(5, None)
     assert result.state == CommandResultState.SUCCESS
 

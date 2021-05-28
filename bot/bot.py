@@ -10,7 +10,7 @@ from discord.ext.commands import Context, Bot
 from dotenv import load_dotenv
 
 from command_result import CommandResult, CommandResultState
-from roll_command import RollCommand
+from pool_command import PoolCommand
 import colours as Colours
 
 load_dotenv()
@@ -21,7 +21,7 @@ bot = commands.Bot(command_prefix='/')
 
 @bot.command(name='pool', help='Roll a dice pool of regular & hunger dice')
 async def pool(ctx: Context, pool_dice: int, hunger_dice: typing.Optional[int]):
-    command = RollCommand(getEmoji)
+    command = PoolCommand(getEmoji)
     result = command.roll(pool_dice, hunger_dice)
     if (result.state == CommandResultState.SUCCESS):
         await send_message(ctx, result.payload)
@@ -31,7 +31,7 @@ async def pool(ctx: Context, pool_dice: int, hunger_dice: typing.Optional[int]):
 
 @bot.command(name='rouse', help='Roll a rouse check, dice pool of 1 regular dice')
 async def rouse(ctx: Context):
-    command = RollCommand(getEmoji)
+    command = PoolCommand(getEmoji)
     result = command.roll(number_of_dice=1, number_of_hunger=0)
     if (result.state == CommandResultState.SUCCESS):
         await send_message(ctx, result.payload)

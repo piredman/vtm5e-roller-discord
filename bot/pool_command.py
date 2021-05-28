@@ -3,7 +3,7 @@ from dice_pool_message import DicePoolMessage
 from command_result import CommandResult, CommandResultState
 
 
-class RollCommand(object):
+class PoolCommand(object):
 
     MIN_DICE_POOL_SIZE = 1
     MAX_DICE_POOL_SIZE = 30
