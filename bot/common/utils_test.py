@@ -1,5 +1,5 @@
 import pytest
-from utils import clamp
+from common.utils import clamp
 
 
 @pytest.mark.parametrize(

@@ -1,6 +1,6 @@
-from dice_pool import DicePool
-from dice_pool_message import DicePoolMessage
-from command_result import CommandResult, CommandResultState
+from dice_pool.dice_pool import DicePool
+from dice_pool.dice_pool_message import DicePoolMessage
+from command.command_result import CommandResult, CommandResultState
 
 
 class PoolCommand(object):

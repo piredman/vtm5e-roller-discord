@@ -1,11 +1,11 @@
 import pytest
 
-from dice_pool_message import DicePoolMessage
-from dice_pool import DicePool, DicePoolState
-from die import Die, DieType
+from dice_pool.dice_pool_message import DicePoolMessage
+from dice_pool.dice_pool import DicePool, DicePoolState
+from die.die import Die, DieType
 
-import colours as Colours
-import emojis as Emojis
+import common.colours as Colours
+import common.emojis as Emojis
 
 
 def test_init_dice_pool_message():

@@ -1,6 +1,6 @@
 import random
 from enum import Enum
-from die import DieType, Die
+from die.die import DieType, Die
 
 
 class DicePoolState(Enum):

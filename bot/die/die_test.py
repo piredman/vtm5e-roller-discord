@@ -1,5 +1,5 @@
 import pytest
-from die import DieType, Die
+from die.die import DieType, Die
 
 
 def test_init_default():

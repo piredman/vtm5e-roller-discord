@@ -1,7 +1,8 @@
 import pytest
-from dice_pool import DicePool, DicePoolState
-from die import DieType, Die
-from utils import clamp
+from dice_pool.dice_pool import DicePool, DicePoolState
+from die.die import DieType, Die
+
+from common.utils import clamp
 
 
 def test_init_empty_dice_pool():

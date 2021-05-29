@@ -1,7 +1,8 @@
-from dice_pool import DicePool, DicePoolState
-from die import DieType
-import colours as Colours
-import emojis as Emojis
+from dice_pool.dice_pool import DicePool, DicePoolState
+from die.die import DieType
+
+import common.colours as Colours
+import common.emojis as Emojis
 
 
 class DicePoolMessage(object):

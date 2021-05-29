@@ -1,4 +1,4 @@
-from will_command import WillCommand
+from command.will.will_command import WillCommand
 
 
 def test_init_will_command():

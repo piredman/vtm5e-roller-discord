@@ -12,9 +12,9 @@ from discord.ext.commands import Context, Bot
 
 from dotenv import load_dotenv
 
-from command_result import CommandResult, CommandResultState
-from pool_command import PoolCommand
-import colours as Colours
+from command.command_result import CommandResult, CommandResultState
+from command.pool.pool_command import PoolCommand
+import common.colours as Colours
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')

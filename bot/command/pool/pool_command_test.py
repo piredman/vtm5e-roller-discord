@@ -1,7 +1,7 @@
 import pytest
 
-from pool_command import PoolCommand
-from command_result import CommandResultState
+from command.pool.pool_command import PoolCommand
+from command.command_result import CommandResultState
 
 
 def getEmojiMock(emote_name: str):
