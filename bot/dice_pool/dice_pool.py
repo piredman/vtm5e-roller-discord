@@ -32,8 +32,37 @@ class DicePool(object):
         self.results = pool_results
         self.state = self.determineState()
 
+    def reroll(self, hunger_dice, regular_dice, max_reroll_size=3) -> int:
+        self.results.clear()
+
+        for die in hunger_dice:
+            self.results.append(Die(die_type=DieType.HUNGER, die_value=die))
+
+        reroll_count = 0
+        for die in regular_dice:
+            if reroll_count >= max_reroll_size:
+                self.results.append(
+                    Die(die_type=DieType.REGULAR, die_value=die))
+                continue
+
+            if die > 5:
+                self.results.append(
+                    Die(die_type=DieType.REGULAR, die_value=die))
+                continue
+
+            value = random.choice(range(1, 10 + 1))
+            die = Die(DieType.REGULAR, value)
+            self.results.append(die)
+            reroll_count += 1
+
+        self.state = self.determineState()
+        return reroll_count
+
     def getHungerDice(self):
         return list(filter(lambda die: (die.die_type == DieType.HUNGER), self.results))
+
+    def getRegularDice(self):
+        return list(filter(lambda die: (die.die_type == DieType.REGULAR), self.results))
 
     def getFailureDice(self):
         return list(filter(lambda die: (die.die_value <= 5), self.results))

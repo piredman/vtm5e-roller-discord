@@ -60,6 +60,22 @@ Example:
 /rouse
 ```
 
+### Will Command
+
+Syntax:
+
+```
+/will
+```
+
+This command will find the last `pool` command you executed and re-roll up to 3 failed regular dice. The new result will then be displayed.
+
+Example:
+
+```
+/will
+```
+
 ---
 
 ### Visual Examples

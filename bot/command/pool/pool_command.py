@@ -18,6 +18,7 @@ class PoolCommand(object):
 
         dice_pool = DicePool()
         dice_pool.roll(number_of_dice, number_of_hunger)
+
         dice_pool_message = DicePoolMessage(dice_pool)
         message = dice_pool_message.formatMessage(self._fn_getEmoji)
         return CommandResult(CommandResultState.SUCCESS, message)

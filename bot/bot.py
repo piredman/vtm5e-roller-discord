@@ -4,16 +4,15 @@ import discord
 import typing
 import logging
 
-from discord.utils import get
-from discord.message import Message
-
 from discord.ext import commands
-from discord.ext.commands import Context, Bot
+from discord.ext.commands import Context
 
 from dotenv import load_dotenv
 
-from command.command_result import CommandResult, CommandResultState
+from command.command_result import CommandResultState
 from command.pool.pool_command import PoolCommand
+from command.will.will_command import WillCommand
+from proxy.discord_proxy import DiscordProxy
 import common.colours as Colours
 
 load_dotenv()
@@ -46,45 +45,15 @@ async def rouse(ctx: Context):
 
 @bot.command(name='will', help='Use willpower to reroll up to 3 failed regular dice')
 async def will(ctx: Context):
-    botId = ctx.bot.user.id
-    authorId = ctx.author.id
+    proxy = DiscordProxy()
+    message = await proxy.get_last_pool_command(ctx)
 
-    message_command = None
-    message_result = None
-    messages = await ctx.channel.history().flatten()
-    for message in messages:
-        if message.author.id != botId or len(message.embeds) <= 0 or message.reference is None:
-            continue
-
-        message_ref = await ctx.fetch_message(message.reference.message_id)
-        if (
-            message_ref is None or
-            not message_ref.content.startswith('/pool') or
-            message_ref.author.id != authorId
-        ):
-            continue
-
-        message_command = message_ref
-        message_result = message
-        break
-
-    if not message_command or not message_result:
-        return
-
-    embed = discord.Embed(title='Previous Roll')
-    embed.add_field(
-        name='content', value=f'{message_result.content}', inline=False)
-    if message_result.embeds and len(message_result.embeds) > 0:
-        message_embed = message_result.embeds[0]
-        embed.add_field(
-            name='title', value=f'{message_embed.title}', inline=False)
-        for field in message_embed.fields:
-            embed.add_field(name=f'{field.name}', value=f'{field.value}')
-
-    await ctx.send(
-        content=f'{message_command.author.name} makes a willpower roll',
-        embed=embed,
-        reference=ctx.message)
+    command = WillCommand(getEmoji)
+    result = command.roll(message.hunger_dice, message.regular_dice)
+    if (result.state == CommandResultState.SUCCESS):
+        await send_message(ctx, result.payload)
+    else:
+        await send_error(ctx, result.payload)
 
 
 @bot.event

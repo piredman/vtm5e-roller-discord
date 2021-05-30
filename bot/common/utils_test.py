@@ -1,5 +1,5 @@
 import pytest
-from common.utils import clamp
+from common.utils import clamp, string_to_numbers
 
 
 @pytest.mark.parametrize(
@@ -14,3 +14,15 @@ from common.utils import clamp
 def test_init_empty_dice_pool(min, value, max):
     actual = clamp(min, value, max)
     assert actual >= min and actual <= max
+
+
+@pytest.mark.parametrize(
+    "input, expected",
+    [
+        pytest.param("1,2,3,4,5", [1, 2, 3, 4, 5]),
+        pytest.param("~1~,~~2~~,a3,@4,-5", [1, 2, 3, 4, 5])
+    ]
+)
+def test_roll_string_to_numbers(input, expected):
+    actual = string_to_numbers(input)
+    assert actual == expected

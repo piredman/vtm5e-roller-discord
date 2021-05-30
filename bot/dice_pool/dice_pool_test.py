@@ -51,6 +51,69 @@ def test_empty_hunger_defaults_to_zero():
     assert len(dicePool.getHungerDice()) == 0
 
 
+@pytest.mark.parametrize(
+    "hunger,regular",
+    [
+        pytest.param([1], [1]),
+        pytest.param([1, 10], [1]),
+        pytest.param([1, 5, 6, 9, 10], [1]),
+        pytest.param([1, 2, 5, 6, 9, 10], [1]),
+    ]
+)
+def test_hunger_dice_never_reroll(hunger, regular):
+    dicePool = DicePool()
+    dicePool.reroll(hunger, regular)
+    assert len(hunger+regular) == len(dicePool.results)
+    assert len(dicePool.getHungerDice()) == len(hunger)
+    actual = list(map(lambda die: die.die_value, dicePool.getHungerDice()))
+    assert hunger == actual
+
+
+@pytest.mark.parametrize(
+    "hunger,regular",
+    [
+        pytest.param([1], [2]),
+        pytest.param([1], [1, 10]),
+        pytest.param([1], [1, 5, 6, 9, 10]),
+        pytest.param([1], [1, 2, 5, 6, 9, 10]),
+    ]
+)
+def test_only_failed_regular_dice_reroll(hunger, regular):
+    dicePool = DicePool()
+    dicePool.reroll(hunger, regular)
+
+    assert len(hunger+regular) == len(dicePool.results)
+    assert len(dicePool.getRegularDice()) == len(regular)
+
+    index = 0
+    actual = list(map(lambda die: die.die_value, dicePool.getRegularDice()))
+    while index < len(regular):
+        input_die = regular[index]
+        actual_die = actual[index]
+        if input_die > 5:
+            assert input_die == actual_die
+        index += 1
+
+
+@pytest.mark.parametrize(
+    "hunger,regular,max,expected",
+    [
+        pytest.param([1], [1], 3, 1),
+        pytest.param([1], [1, 2], 3, 2),
+        pytest.param([1], [1, 2, 3], 3, 3),
+        pytest.param([1], [1, 10, 3], 3, 2),
+        pytest.param([1], [1, 10, 3, 5, 9], 3, 3),
+    ]
+)
+def test_max_reroll_limit(hunger, regular, max, expected):
+    dicePool = DicePool()
+    reroll_count = dicePool.reroll(hunger, regular, max)
+
+    assert len(hunger+regular) == len(dicePool.results)
+    assert len(dicePool.getRegularDice()) == len(regular)
+    assert reroll_count == expected
+
+
 def test_get_failure_dice():
     dicePool = DicePool()
     for value in range(1, 10+1):
